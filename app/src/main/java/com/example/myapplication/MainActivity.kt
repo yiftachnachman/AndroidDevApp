@@ -15,20 +15,30 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private var gcounter: Long = 0
     fun getStore() = getPreferences(Context.MODE_PRIVATE)
+    var G_COUNTER_KEY: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val name = intent.extras?.get("username").toString().trim()
+        G_COUNTER_KEY = name
+
         if (savedInstanceState != null) {
-            gcounter = savedInstanceState.getLong(G_COUNTER_KEY, 0)
-            myCounter.text = gcounter.toString()
+            updateCounter(savedInstanceState.getLong(G_COUNTER_KEY, 0))
+        } else if (getStore().contains(G_COUNTER_KEY)){
+                updateCounter(getStore().getLong(G_COUNTER_KEY, 0))
         }
+
         myButton.setOnClickListener {
             gcounter++
             myCounter.text = "Counter: " + gcounter.toString()
             myImage.rotate90()
         }
+    }
+    private fun updateCounter(count: Long){
+        gcounter = count
+        myCounter.text = gcounter.toString()
     }
 
     override fun onPause() {
@@ -44,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    companion object {
-        private const val G_COUNTER_KEY = "GCounterKey"
-    }
+    //companion object {
+      //  private const val G_COUNTER_KEY = "GCounterKey"
+    //}
 }
