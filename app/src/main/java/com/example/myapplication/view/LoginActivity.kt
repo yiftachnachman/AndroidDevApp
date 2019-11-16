@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         })
         //shows that this button which is named LoginButton will be visible
             loginButton.setOnClickListener{
+
                 startActivity(Intent(this, MainActivity::class.java).apply {putExtra ( "username", loginUsernameField.text)})
             }
     }

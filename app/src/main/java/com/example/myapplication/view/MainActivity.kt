@@ -1,12 +1,16 @@
 package com.example.myapplication.view
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.bumptech.glide.Glide
+import com.example.myapplication.Model.Gif
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.R
+import com.example.myapplication.Model.Gif
 import com.example.myapplication.util.rotate90
 import com.example.myapplication.viewmodel.CountViewModel
+import com.example.myapplication.viewmodel.GifViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 //this activity gets turned on during the most of the time the app exists.
@@ -14,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 //This is also like java's main function.
 class MainActivity : AppCompatActivity() {
     private lateinit var countViewModel: CountViewModel
+    private lateinit var gifViewModel: GifViewModel
     private var gcounter: Long = 0
     private fun getUserName() = intent.extras?.get("username").toString().trim()
 //    fun getStore() = getPreferences(Context.MODE_PRIVATE)
@@ -41,7 +46,9 @@ class MainActivity : AppCompatActivity() {
         countViewModel = ViewModelProviders.of(this).get(CountViewModel::class.java)
         countViewModel.getUserCount(getUserName()).observe(this,
             androidx.lifecycle.Observer {updateCounter(it) })
-
+        gifViewModel = ViewModelProviders.of(this).get(GifViewModel::class.java)
+        gifViewModel.getRandomGif("android").observe(this,
+            androidx.lifecycle.Observer { loadGif(it) })
         myButton.setOnClickListener {
             gcounter++
             myCounter.text = "Counter: " + gcounter.toString()
@@ -53,6 +60,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateCounter(count: Long){
         gcounter = count
         myCounter.text = gcounter.toString()
+    }
+
+    private fun loadGif(gif: Gif){
+        Glide.with(this)
+            .load(gif.url)
+            .into(image)
     }
 //onPause will make that part of the activity stop until further told to
 //    override fun onPause() {
