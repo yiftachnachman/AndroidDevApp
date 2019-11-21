@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.Model.Gif
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.R
-import com.example.myapplication.Model.Gif
 import com.example.myapplication.util.rotate90
 import com.example.myapplication.viewmodel.CountViewModel
 import com.example.myapplication.viewmodel.GifViewModel
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadGif(gif: Gif){
         Glide.with(this)
             .load(gif.url)
-            .into(image)
+            .into(myImage)
     }
 //onPause will make that part of the activity stop until further told to
 //    override fun onPause() {
