@@ -30,18 +30,6 @@
         android:text="Click Me!"
         tools:visibility="visible" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@+id/myImage"
-        app:layout_anchorGravity="end|top" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:text="TextView" />
 
     <!--    <Button-->
     <!--        android:id="@+id/button"-->

@@ -45,13 +45,16 @@ class MainActivity : AppCompatActivity() {
         countViewModel = ViewModelProviders.of(this).get(CountViewModel::class.java)
         countViewModel.getUserCount(getUserName()).observe(this,
             androidx.lifecycle.Observer {updateCounter(it) })
+
         gifViewModel = ViewModelProviders.of(this).get(GifViewModel::class.java)
         gifViewModel.getRandomGif("android").observe(this,
-            androidx.lifecycle.Observer { loadGif(it) })
+            androidx.lifecycle.Observer {loadGif(it)})
         myButton.setOnClickListener {
             gcounter++
             myCounter.text = "Counter: " + gcounter.toString()
             myImage.rotate90()
+
+            countViewModel.setUserCount(getUserName(), gcounter + 1)
         }
     }
     //updateCounter is a function that just makes sure that the counter inside the text box is always

@@ -31,6 +31,6 @@ class ApiRepository(context: Context) {
     }
 
     companion object {
-        private const val API_KEY = "YdwxPNt3JQbgS8rKBDs3hawt4BhmmwHW"
+        private const val API_KEY = "KYlgkhIA7R3fQlwBxuRIw4tco7LLiTaa"
     }
 }
