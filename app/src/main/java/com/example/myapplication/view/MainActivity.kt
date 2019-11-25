@@ -1,16 +1,20 @@
 package com.example.myapplication.view
 
 import android.content.Context
+import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.example.myapplication.Model.Gif
+import com.example.myapplication.util.MyAlarmManager
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.R
 import com.example.myapplication.util.rotate90
 import com.example.myapplication.viewmodel.CountViewModel
 import com.example.myapplication.viewmodel.GifViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.atomic.LongAdder
+
 
 //this activity gets turned on during the most of the time the app exists.
 // The main activity has several other functions like onCreate() that you can use for the app.
@@ -19,10 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var countViewModel: CountViewModel
     private lateinit var gifViewModel: GifViewModel
     private var gcounter: Long = 0
-    private fun getUserName() = intent.extras?.get("username").toString().trim()
-//    fun getStore() = getPreferences(Context.MODE_PRIVATE)
-//    var G_COUNTER_KEY: String = ""
 
+    private fun getUserName() = intent.extras?.get("username").toString().trim()
 
 //creating a instance of a object and if it previously had data in it, it will still have that data.
 // Otherwise it is null.
@@ -30,13 +32,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//val name = intent.extras?.get("username").toString().trim()
-//G_COUNTER_KEY = name
-//if (savedInstanceState != null) {
-//updateCounter(savedInstanceState.getLong(G_COUNTER_KEY, 0))
-//} else if (getStore().contains(G_COUNTER_KEY)){
-//updateCounter(getStore().getLong(G_COUNTER_KEY, 0))
-//}
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.SECOND, 10)
+        MyAlarmManager.setAlarm(applicationContext, calendar.timeInMillis, "Test Message!")
 
     //countViewModel calls in the other activity and turned it on.
     // Then it uses that activity in order to get the amount of users there are and
@@ -49,8 +47,10 @@ class MainActivity : AppCompatActivity() {
         gifViewModel = ViewModelProviders.of(this).get(GifViewModel::class.java)
         gifViewModel.getRandomGif("android").observe(this,
             androidx.lifecycle.Observer {loadGif(it)})
+
         myButton.setOnClickListener {
             gcounter++
+            gcounter--
             myCounter.text = "Counter: " + gcounter.toString()
             myImage.rotate90()
 
