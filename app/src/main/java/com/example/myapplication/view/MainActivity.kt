@@ -1,6 +1,11 @@
 package com.example.myapplication.view
 
+import android.app.AlarmManager
+import android.content.Intent
+import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
+import java.util.*
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var countViewModel: CountViewModel
     private lateinit var gifViewModel: GifViewModel
     private var gcounter: Long = 0
+    lateinit var alarmManager: AlarmManager
 
     private fun getUserName() = intent.extras?.get("username").toString().trim()
 
@@ -32,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.SECOND, 10)
-        MyAlarmManager.setAlarm(applicationContext, calendar.timeInMillis, "Test Message!")
+       // val calendar = Calendar.getInstance()
+      //  calendar.add(Calendar.SECOND, 10)
+    //    MyAlarmManager.setAlarm(applicationContext, calendar.timeInMillis, "Test Message!")
 
     //countViewModel calls in the other activity and turned it on.
     // Then it uses that activity in order to get the amount of users there are and
@@ -46,7 +52,11 @@ class MainActivity : AppCompatActivity() {
 
         gifViewModel = ViewModelProviders.of(this).get(GifViewModel::class.java)
         gifViewModel.getRandomGif("android").observe(this,
-            androidx.lifecycle.Observer {loadGif(it)})
+            androidx.lifecycle.Observer {
+                Log.d("MainActivity", "before")
+                loadGif(it)
+                Log.d("MainActivity", "after")
+            })
 
         myButton.setOnClickListener {
             gcounter++
@@ -56,6 +66,21 @@ class MainActivity : AppCompatActivity() {
 
             countViewModel.setUserCount(getUserName(), gcounter + 1)
         }
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmmanagerbutton.setOnClickListener {
+            val second = 10 * 1000
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("ALARM_MODE", true)
+            val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            Log.d("MainActivity", " Create : " + Date().toString())
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + second, pendingIntent)
+
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + second, pendingIntent)
+        }
+    }
     }
     //updateCounter is a function that just makes sure that the counter inside the text box is always
     // at the desired number.
@@ -64,10 +89,17 @@ class MainActivity : AppCompatActivity() {
         myCounter.text = gcounter.toString()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+    }
+
+
     private fun loadGif(gif: Gif){
         Glide.with(this)
             .load(gif.url)
+            .error(R.drawable.nfl)
             .into(myImage)
+
     }
 //onPause will make that part of the activity stop until further told to
 //    override fun onPause() {

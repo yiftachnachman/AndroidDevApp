@@ -9,6 +9,7 @@ import com.example.myapplication.Network.Api
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.util.Log
 
 
 class ApiRepository(context: Context) {
@@ -23,7 +24,7 @@ class ApiRepository(context: Context) {
             }
 
             override fun onFailure(call: Call<GifResponse>, t: Throwable) {
-                //nothing
+                Log.d("MainActivity","Failed to create: ${t.localizedMessage} ${t.stackTrace}")
             }
         })
 

@@ -30,6 +30,12 @@
         android:text="Click Me!"
         tools:visibility="visible" />
 
+    <Button
+        android:id="@+id/alarmmanagerbutton"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:text="Turn on Alarm" />
+
 
     <!--    <Button-->
     <!--        android:id="@+id/button"-->
